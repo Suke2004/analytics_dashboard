@@ -1,0 +1,15 @@
+
+> api@1.0.0 build D:\Prog\internship tasks\analytics_dashboard\my-analytics-app\apps\api
+> tsc
+
+error TS6059: File 'D:/Prog/internship tasks/analytics_dashboard/my-analytics-app/apps/api/scripts/seed.ts' is not under 'rootDir' 'D:/Prog/internship tasks/analytics_dashboard/my-analytics-app/apps/api/src'. 'rootDir' is expected to contain all source files.
+  The file is in the program because:
+    Matched by include pattern 'scripts/**/*' in 'D:/Prog/internship tasks/analytics_dashboard/my-analytics-app/apps/api/tsconfig.json'
+src/routes/cashOutflow.ts(4,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@5.1.0/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+src/routes/categorySpend.ts(4,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@5.1.0/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+src/routes/chat.ts(4,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@5.1.0/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+src/routes/invoices.ts(4,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@5.1.0/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+src/routes/invoiceTrends.ts(4,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@5.1.0/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+src/routes/stats.ts(4,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@5.1.0/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+src/routes/vendors.ts(4,7): error TS2742: The inferred type of 'router' cannot be named without a reference to '.pnpm/@types+express-serve-static-core@5.1.0/node_modules/@types/express-serve-static-core'. This is likely not portable. A type annotation is necessary.
+ ELIFECYCLE  Command failed with exit code 1.

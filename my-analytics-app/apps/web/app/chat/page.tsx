@@ -82,12 +82,12 @@ export default function ChatPage() {
 
     const columns = Object.keys(result[0]);
     return (
-      <div className='overflow-x-auto border border-border rounded-lg'>
+      <div className='overflow-x-auto border border-cyan-500/20 rounded-lg'>
         <table className='min-w-full text-sm'>
-          <thead className='bg-muted/50'>
+          <thead className='bg-cyan-950/50'>
             <tr>
               {columns.map((col) => (
-                <th key={col} className='text-left px-3 py-2 font-medium'>
+                <th key={col} className='text-left px-3 py-2 font-medium text-cyan-200'>
                   {col}
                 </th>
               ))}
@@ -95,9 +95,9 @@ export default function ChatPage() {
           </thead>
           <tbody>
             {result.map((row, idx) => (
-              <tr key={idx} className='border-t border-border/50'>
+              <tr key={idx} className='border-t border-cyan-500/10 hover:bg-cyan-950/30 transition-colors'>
                 {columns.map((col) => (
-                  <td key={col} className='px-3 py-2 text-muted-foreground'>
+                  <td key={col} className='px-3 py-2 text-cyan-300'>
                     {String(row[col])}
                   </td>
                 ))}
@@ -110,20 +110,22 @@ export default function ChatPage() {
   }
 
   return (
-    <div className='container mx-auto px-4 py-8 max-w-5xl'>
-      <h1 className='text-3xl font-bold mb-2'>💬 Chat with Data</h1>
-      <p className='text-muted-foreground mb-8'>
-        Ask questions about your analytics dataset and get instant SQL +
-        results.
-      </p>
+    <div className='px-8 py-8 max-w-5xl mx-auto'>
+      <div className='mb-8'>
+        <h1 className='text-4xl font-bold mb-2 bg-gradient-to-r from-purple-400 via-magenta-400 to-cyan-400 bg-clip-text text-transparent'>
+          💬 Chat with Data
+        </h1>
+        <p className='text-muted-foreground'>
+          Ask questions about your analytics dataset and get instant SQL + results.
+        </p>
+      </div>
 
       {/* Prompt Input */}
-      <Card className='mb-8 bg-background border-border'>
+      <Card className='mb-8 border border-purple-500/30 bg-gradient-to-br from-card to-card/50'>
         <CardHeader>
-          <CardTitle>Ask a Question</CardTitle>
+          <CardTitle className='text-purple-100'>Ask a Question</CardTitle>
           <CardDescription>
-            Try: “Top 5 vendors by spend”, “Invoices from last month”, “Average
-            invoice value”
+            Try: "Top 5 vendors by spend", "Invoices from last month", "Average invoice value"
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -134,9 +136,12 @@ export default function ChatPage() {
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               disabled={loading}
-              className='flex-1'
+              className='flex-1 bg-background border-purple-500/30 text-foreground placeholder:text-muted-foreground'
             />
-            <Button type='submit' disabled={loading || !prompt.trim()}>
+            <Button
+              type='submit'
+              disabled={loading || !prompt.trim()}
+              className='bg-gradient-to-r from-purple-600 to-magenta-600 hover:from-purple-500 hover:to-magenta-500 text-white shadow-lg shadow-purple-500/30 disabled:opacity-50'>
               {loading ? (
                 <Loader2 className='animate-spin w-4 h-4' />
               ) : (
@@ -150,9 +155,9 @@ export default function ChatPage() {
       {/* Chat History */}
       <div className='space-y-8'>
         {history.length === 0 && (
-          <Card className='border-dashed border-muted-foreground/30'>
+          <Card className='border-2 border-dashed border-cyan-500/20 bg-gradient-to-br from-cyan-950/20 to-cyan-900/10'>
             <CardContent className='py-12 text-center text-muted-foreground'>
-              No queries yet. Start by asking a question above!
+              ✨ No queries yet. Start by asking a question above!
             </CardContent>
           </Card>
         )}
@@ -165,26 +170,26 @@ export default function ChatPage() {
             transition={{ duration: 0.3 }}
             className='space-y-4'>
             {/* Question */}
-            <Card className='bg-muted/20 border-border'>
+            <Card className='border border-purple-500/20 bg-gradient-to-br from-purple-950/30 to-purple-900/10'>
               <CardHeader>
-                <CardTitle className='text-sm font-semibold text-foreground'>
-                  Question
+                <CardTitle className='text-sm font-semibold text-purple-200'>
+                  ❓ Your Question
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className='text-base font-medium'>{item.prompt}</p>
+                <p className='text-base font-medium text-foreground'>{item.prompt}</p>
               </CardContent>
             </Card>
 
             {/* SQL */}
-            <Card className='bg-muted/10 border-border'>
+            <Card className='border border-cyan-500/20 bg-gradient-to-br from-cyan-950/30 to-cyan-900/10'>
               <CardHeader>
-                <CardTitle className='text-sm text-muted-foreground'>
+                <CardTitle className='text-sm text-cyan-200'>
                   🧠 Generated SQL
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <pre className='bg-background border border-border/30 p-3 rounded-md text-xs overflow-x-auto text-green-400'>
+                <pre className='bg-background border border-cyan-500/30 p-4 rounded-lg text-xs overflow-x-auto text-cyan-300 font-mono'>
                   {item.response.sql || "No SQL generated"}
                 </pre>
               </CardContent>
@@ -192,22 +197,22 @@ export default function ChatPage() {
 
             {/* Results */}
             {item.response.error ? (
-              <Card className='border-destructive/50 bg-destructive/10'>
+              <Card className='border border-red-500/30 bg-gradient-to-br from-red-950/30 to-red-900/10'>
                 <CardHeader>
-                  <CardTitle className='text-sm text-destructive'>
-                    Error
+                  <CardTitle className='text-sm text-red-300'>
+                    ⚠️ Error
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className='text-destructive text-sm'>
+                  <p className='text-red-300 text-sm'>
                     {item.response.error}
                   </p>
                 </CardContent>
               </Card>
             ) : (
-              <Card className='bg-muted/10 border-border'>
+              <Card className='border border-emerald-500/20 bg-gradient-to-br from-emerald-950/30 to-emerald-900/10'>
                 <CardHeader>
-                  <CardTitle className='text-sm text-muted-foreground'>
+                  <CardTitle className='text-sm text-emerald-200'>
                     📊 Results
                   </CardTitle>
                   <CardDescription className='text-xs'>

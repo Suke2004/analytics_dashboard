@@ -27,6 +27,8 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "mixtral-8x7b")  # Default model
 ENV = os.getenv("ENV", "development")
+print(f"🚀 Starting Vanna AI in {ENV} mode...")
+print(f"Using Groq Model: {GROQ_MODEL}")
 
 if not DATABASE_URL:
     raise RuntimeError("❌ DATABASE_URL not found in environment variables")
