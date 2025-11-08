@@ -1,135 +1,201 @@
-# Turborepo starter
+# Analytics Dashboard - Full-Stack Monorepo
 
-This Turborepo starter is maintained by the Turborepo core team.
+A production-grade monorepo using Turborepo containing:
 
-## Using this example
+- **apps/web**: Next.js 14 full-stack app with API routes, analytics dashboard, and Prisma ORM
+- **apps/vanna**: FastAPI Python service for "Chat with Data"
+- **apps/data**: Dataset and seed scripts
 
-Run the following command:
+## 🏗️ Project Structure
 
-```sh
-npx create-turbo@latest
+```
+analytics-app/
+├── apps/
+│   ├── web/        → Next.js 14 full-stack app (TypeScript, Tailwind, shadcn/ui, Recharts, Prisma, API Routes)
+│   ├── vanna/      → FastAPI backend (Python) for AI-powered SQL generation
+│   └── data/       → Dataset + seed scripts
+├── packages/       → Shared packages
+├── turbo.json      → Turborepo configuration
+└── package.json    → Root package.json
 ```
 
-## What's inside?
+## 🚀 Getting Started
 
-This Turborepo includes the following packages/apps:
+> **Quick Start?** See [QUICKSTART.md](./QUICKSTART.md) for a 5-minute setup guide.
 
-### Apps and Packages
+### Prerequisites
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- Node.js >= 18
+- **Neon Postgres** (serverless PostgreSQL) - Sign up at https://console.neon.tech
+- Python 3.8+ (for vanna service)
+- pnpm (package manager)
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### Setup
 
-### Utilities
+> For detailed setup instructions, see [SETUP.md](./SETUP.md)
 
-This Turborepo has some additional tools already setup for you:
+1. **Install dependencies:**
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+   ```bash
+   pnpm install
+   ```
+
+2. **Set up Neon Postgres database:**
+   - Sign up at https://console.neon.tech
+   - Create a new project and database
+   - Copy your connection string from the dashboard
+   - See [NEON_SETUP.md](./NEON_SETUP.md) for detailed instructions
+
+3. **Configure environment variables:**
+
+   See [ENV_SETUP.md](./ENV_SETUP.md) for details on creating environment files.
+
+4. **Set up database schema:**
+
+   ```bash
+   cd apps/web
+   pnpm prisma generate
+   pnpm prisma migrate dev --name init
+   ```
+
+5. **Seed the database:**
+
+   ```bash
+   cd apps/web
+   pnpm prisma:seed
+   ```
+
+6. **Set up Python dependencies (for vanna):**
+   ```bash
+   cd apps/vanna
+   pip install -r requirements.txt
+   ```
+
+## 🏃 Running the Project
+
+### Development Mode
+
+Run all services in parallel:
+
+```bash
+pnpm dev
+```
+
+This will start:
+
+- **Web** (with API routes): http://localhost:3000
+- **Vanna**: http://localhost:8000
+
+### Run Individual Services
+
+```bash
+# Web (includes API routes)
+cd apps/web
+pnpm dev
+
+# Vanna
+cd apps/vanna
+pnpm dev
+# Or: uvicorn main:app --reload --port 8000
+```
+
+## 📁 Apps Overview
+
+### apps/web
+
+Next.js 14 full-stack application with:
+
+- App Router (pages and API routes)
+- TypeScript
+- TailwindCSS + shadcn/ui components
+- Recharts for data visualization
+- Prisma ORM with PostgreSQL
+- API Routes (Next.js API endpoints):
+  - `GET /api/stats` - Overview statistics
+  - `GET /api/invoice-trends` - Invoice trends over time
+  - `GET /api/vendors/top10` - Top 10 vendors
+  - `GET /api/category-spend` - Spend by category
+  - `GET /api/cash-outflow` - Cash outflow trends
+  - `GET /api/invoices` - Invoices with search/sort
+  - `GET /api/invoices/[id]` - Single invoice details
+  - `POST /api/chat-with-data` - Forward queries to Vanna AI
+  - `GET /api/health` - Health check
+- Pages:
+  - `/dashboard` - Analytics dashboard with charts and tables
+  - `/chat` - Chat with Data interface
+
+### apps/vanna
+
+FastAPI Python service for:
+
+- Natural language to SQL conversion
+- Query execution on PostgreSQL
+- Returns SQL and results
+
+**Endpoints:**
+
+- `GET /health` - Health check
+- `POST /query` - Process natural language query
+
+## 🗄️ Database Schema
+
+- **Vendor** - Vendor information
+- **Customer** - Customer information
+- **Invoice** - Invoice records
+- **LineItem** - Invoice line items
+- **Payment** - Payment records
+
+See `apps/web/prisma/schema.prisma` for full schema.
+
+## 🧪 Development
 
 ### Build
 
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+```bash
+pnpm build
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+### Lint
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
+```bash
+pnpm lint
 ```
 
-### Develop
+### Type Check
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+```bash
+pnpm check-types
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## 📚 Documentation
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+- **[NEON_SETUP.md](./NEON_SETUP.md)** - Neon Postgres setup guide (start here!)
+- **[SETUP.md](./SETUP.md)** - Detailed setup instructions and troubleshooting
+- **[ENV_SETUP.md](./ENV_SETUP.md)** - Environment variables configuration guide
+- **[QUICKSTART.md](./QUICKSTART.md)** - Quick start guide
+- **[PROJECT_ANALYSIS.md](./PROJECT_ANALYSIS.md)** - Comprehensive project analysis and summary
+- **[apps/data/README.md](./apps/data/README.md)** - Data structure and seed script documentation
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
+## 📝 Notes
 
-### Remote Caching
+- The seed script processes `apps/data/Analytics_Test_Data.json`
+- Vanna AI uses mock SQL generation (integrate Groq API for production)
+- All services support hot reload in development mode
+- CORS is enabled for development (configure properly for production)
+- **Important:** You must create `.env` files for each service (see `ENV_SETUP.md`)
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+## 🔮 TODO
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+- [ ] Integrate Groq API in vanna service for better SQL generation
+- [ ] Add authentication and authorization
+- [ ] Add query caching
+- [ ] Add unit and integration tests
+- [ ] Set up CI/CD pipeline
+- [ ] Add Docker configuration
+- [ ] Improve error handling and validation
+- [ ] Add rate limiting
+- [ ] Add logging and monitoring
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+## 📄 License
 
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+MIT

@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Vendor {
+  id        Int       @id @default(autoincrement())
+  name      String
+  category  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  invoices  Invoice[]
+}
+
+model Customer {
+  id        Int       @id @default(autoincrement())
+  name      String
+  region    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  invoices  Invoice[]
+}
+
+model Invoice {
+  id         Int        @id @default(autoincrement())
+  invoiceNo  String     @unique
+  vendorId   Int
+  customerId Int
+  date       DateTime
+  amount     Float
+  status     String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  customer   Customer   @relation(fields: [customerId], references: [id])
+  vendor     Vendor     @relation(fields: [vendorId], references: [id])
+  lineItems  LineItem[]
+  payments   Payment[]
+}
+
+model LineItem {
+  id          Int      @id @default(autoincrement())
+  invoiceId   Int
+  description String
+  category    String
+  amount      Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+model Payment {
+  id        Int      @id @default(autoincrement())
+  invoiceId Int
+  paidDate  DateTime
+  amount    Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
